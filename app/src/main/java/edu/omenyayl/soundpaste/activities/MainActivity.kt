@@ -29,14 +29,14 @@ class MainActivity : AppCompatActivity() {
     private fun viewSendFragment() {
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.fragment_container, Send())
+            .replace(R.id.fragment_container, Send.newInstance())
             .commit()
     }
 
     private fun viewReceiveFragment() {
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.fragment_container, Receive())
+            .replace(R.id.fragment_container, Receive.newInstance())
             .commit()
     }
 
