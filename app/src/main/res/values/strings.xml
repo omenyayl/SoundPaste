@@ -7,4 +7,10 @@
     <string name="receive">Receive</string>
     <string name="snippet_text">Snippet text</string>
     <string name="send_data">Send Data</string>
+    <string name="ascii_size_warning">Due to protocol limitations, a maximum of 90 ASCII characters may be sent at a
+        time.
+    </string>
+    <string name="text_to_send">Text to Send</string>
+    <string name="button_send">Send</string>
+    <string name="sample_60_90">60 / 90</string>
 </resources>

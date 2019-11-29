@@ -41,12 +41,13 @@ class Receive : Fragment() {
         viewModel.getSnippetList().observe(this.viewLifecycleOwner, Observer { t -> initRecyclerViewSnippetList(t) })
     }
 
+    private fun onSnippetClick(snippet: Snippet) {
+        Toast.makeText(context, snippet.text, Toast.LENGTH_SHORT).show()
+    }
 
     private fun initRecyclerViewSnippetList(snippetList: List<Snippet>) {
         val adapter = SnippetListAdapter(snippetList)
-        adapter.onModelClickListener = { snippet ->
-            Toast.makeText(context, snippet.text, Toast.LENGTH_SHORT).show()
-        }
+        adapter.onModelClickListener = this::onSnippetClick
         recyclerViewSnippetList.adapter = adapter
         recyclerViewSnippetList.layoutManager = LinearLayoutManager(context)
         recyclerViewSnippetList.isNestedScrollingEnabled = false
