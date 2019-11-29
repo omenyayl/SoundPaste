@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 
 import edu.omenyayl.soundpaste.R
 import edu.omenyayl.soundpaste.adapters.SnippetListAdapter

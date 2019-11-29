@@ -1,15 +1,18 @@
 package edu.omenyayl.soundpaste.repositories
 
+import androidx.lifecycle.MutableLiveData
 import edu.omenyayl.soundpaste.models.Snippet
 
 object SnippetRepository {
-    val snippetList: List<Snippet>
+    val snippetList: MutableLiveData<List<Snippet>> = MutableLiveData()
+    var snippetText: MutableLiveData<String> = MutableLiveData()
 
     init {
-        this.snippetList = ArrayList()
+        val snippets = ArrayList<Snippet>()
         for (i in 0..25) {
-            this.snippetList.add(Snippet("Hello: ".plus(i)))
+            snippets.add(Snippet("Hello: $i"))
         }
+        snippetList.value = snippets
     }
 
 }
