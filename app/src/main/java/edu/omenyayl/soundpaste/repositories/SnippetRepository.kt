@@ -9,9 +9,6 @@ object SnippetRepository {
 
     init {
         val snippets = ArrayList<Snippet>()
-        for (i in 0..25) {
-            snippets.add(Snippet("Hello: $i"))
-        }
         snippetList.value = snippets
     }
 

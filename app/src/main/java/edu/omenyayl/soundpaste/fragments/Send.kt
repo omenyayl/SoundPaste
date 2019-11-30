@@ -125,5 +125,4 @@ class Send : Fragment() {
             else -> Log.e("ChirpError: ", error.message)
         }
     }
-
 }
