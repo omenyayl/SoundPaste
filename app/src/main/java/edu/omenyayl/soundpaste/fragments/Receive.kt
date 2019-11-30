@@ -71,6 +71,10 @@ class Receive : Fragment() {
         }
     }
 
+    /**
+     * Open the ReceiveMessageDialog to start listening to messages. This dialog itself is responsible for
+     * starting the chirp listener
+     */
     private fun startListening() {
         val dialog = ReceiveMessageDialog()
         dialog.show(fragmentManager!!, "message")

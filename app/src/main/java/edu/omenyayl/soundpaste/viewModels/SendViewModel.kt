@@ -9,10 +9,16 @@ import edu.omenyayl.soundpaste.repositories.SnippetRepository
  */
 class SendViewModel : ViewModel() {
 
+    /**
+     * @return observable for the snippet text
+     */
     fun getSnippetText(): LiveData<String> {
         return SnippetRepository.snippetText
     }
 
+    /**
+     * Call this when the snippet text is changed
+     */
     fun onSnippetTextChanged(text: String) {
         SnippetRepository.snippetText.postValue(text)
     }

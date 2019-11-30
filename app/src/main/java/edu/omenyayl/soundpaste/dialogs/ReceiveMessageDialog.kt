@@ -11,6 +11,9 @@ import edu.omenyayl.soundpaste.misc.Constants
 import edu.omenyayl.soundpaste.viewModels.ReceiveViewModel
 import io.chirp.chirpsdk.ChirpSDK
 
+/**
+ * Simple dialog that starts listening to the chirp messages
+ */
 class ReceiveMessageDialog: DialogFragment() {
 
     lateinit var chirp: ChirpSDK
@@ -36,6 +39,9 @@ class ReceiveMessageDialog: DialogFragment() {
         stopListening()
     }
 
+    /**
+     * Start listening to chirp messages
+     */
     @ExperimentalStdlibApi
     private fun startListening() {
         chirp = ChirpSDK(context!!, Constants.CHIRP_KEY, Constants.CHIRP_SECRET)
@@ -52,6 +58,9 @@ class ReceiveMessageDialog: DialogFragment() {
         chirp.start(send = false, receive = true)
     }
 
+    /**
+     * When chirp finishes decoding the message
+     */
     private fun onMessageReceived(message: String) {
         viewModel.onReceiveMessage(message)
         dialog?.dismiss()

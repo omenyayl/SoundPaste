@@ -9,10 +9,13 @@ import edu.omenyayl.soundpaste.fragments.Receive
 import edu.omenyayl.soundpaste.fragments.Send
 
 /**
- * Entry point
+ * Entry point of the application
  */
 class MainActivity : AppCompatActivity() {
 
+    /**
+     * Bottom navigation handling
+     */
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_send -> {
@@ -31,6 +34,10 @@ class MainActivity : AppCompatActivity() {
         viewSendFragment("")
     }
 
+    /**
+     * Start the send fragment
+     * @param initialMessage Start the send fragment with the text box pre-filled with this param
+     */
     private fun viewSendFragment(initialMessage: String) {
         supportFragmentManager
             .beginTransaction()
@@ -38,6 +45,9 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
+    /**
+     * Start the receive fragment
+     */
     private fun viewReceiveFragment() {
         supportFragmentManager
             .beginTransaction()

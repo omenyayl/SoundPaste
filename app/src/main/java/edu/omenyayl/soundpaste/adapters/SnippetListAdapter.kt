@@ -10,6 +10,9 @@ import edu.omenyayl.soundpaste.R
 import edu.omenyayl.soundpaste.models.Snippet
 import kotlinx.android.synthetic.main.snippet_item.view.*
 
+/**
+ * Adapter for showing a list of snippets
+ */
 class SnippetListAdapter (private var snippetList: List<Snippet>) : RecyclerView.Adapter<SnippetListAdapter.ViewHolder>() {
 
     lateinit var onCopyClickListener: ((Snippet) -> Unit)

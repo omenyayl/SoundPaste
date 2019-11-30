@@ -10,10 +10,16 @@ import edu.omenyayl.soundpaste.repositories.SnippetRepository
  */
 class ReceiveViewModel : ViewModel() {
 
+    /**
+     * @return Observable for the snippet list
+     */
     fun getSnippetList(): LiveData<MutableList<Snippet>> {
         return SnippetRepository.snippetList
     }
 
+    /**
+     * Call when a message was retrieved
+     */
     fun onReceiveMessage(message: String) {
         val snippets = SnippetRepository.snippetList.value
         snippets?.add(Snippet(message))
