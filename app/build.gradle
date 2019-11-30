@@ -4,6 +4,9 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+def localProperties = new Properties()
+localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+
 android {
     compileSdkVersion 28
     buildToolsVersion "29.0.2"
@@ -14,11 +17,19 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "CHIRP_KEY", localProperties.containsKey("CHIRP_KEY") ? localProperties["CHIRP_KEY"] : "\"\""
+        buildConfigField "String", "CHIRP_SECRET", localProperties.containsKey("CHIRP_SECRET") ? localProperties["CHIRP_SECRET"] : "\"\""
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    repositories {
+        maven {
+            url "https://maven.chirp.io/release"
         }
     }
 }
@@ -36,4 +47,5 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation "io.chirp:chirpsdk:3.10.+"
 }

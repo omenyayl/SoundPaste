@@ -10,8 +10,14 @@ import edu.omenyayl.soundpaste.repositories.SnippetRepository
  */
 class ReceiveViewModel : ViewModel() {
 
-    fun getSnippetList(): LiveData<List<Snippet>> {
+    fun getSnippetList(): LiveData<MutableList<Snippet>> {
         return SnippetRepository.snippetList
+    }
+
+    fun onReceiveMessage(message: String) {
+        val snippets = SnippetRepository.snippetList.value
+        snippets?.add(Snippet(message))
+        SnippetRepository.snippetList.postValue(snippets)
     }
 
 }
