@@ -1,6 +1,7 @@
 package edu.omenyayl.soundpaste.fragments
 
 import android.Manifest
+import android.content.*
 import android.content.pm.PackageManager
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -9,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -76,13 +76,24 @@ class Receive : Fragment() {
         dialog.show(fragmentManager!!, "message")
     }
 
-    private fun onSnippetClick(snippet: Snippet) {
-        Toast.makeText(context, snippet.text, Toast.LENGTH_SHORT).show()
+    private fun onClickSnippetShare(snippet: Snippet) {
+        val shareIntent = Intent(Intent.ACTION_SEND)
+        shareIntent.type = "text/plain"
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "SoundPaste")
+        shareIntent.putExtra(Intent.EXTRA_TEXT, snippet.text)
+        startActivity(shareIntent)
+    }
+
+    private fun onClickSnippetCopy(snippet: Snippet) {
+        val clipBoardManager: ClipboardManager = activity?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        clipBoardManager.primaryClip = ClipData.newPlainText("SoundPaste snippet", snippet.text)
+        Toast.makeText(context, "Copied to clipboard", Toast.LENGTH_SHORT).show()
     }
 
     private fun initRecyclerViewSnippetList(snippetList: List<Snippet>) {
         val adapter = SnippetListAdapter(snippetList)
-        adapter.onModelClickListener = this::onSnippetClick
+        adapter.onCopyClickListener = this::onClickSnippetCopy
+        adapter.onShareClickListener = this::onClickSnippetShare
         recyclerViewSnippetList.adapter = adapter
         recyclerViewSnippetList.layoutManager = LinearLayoutManager(context)
         recyclerViewSnippetList.isNestedScrollingEnabled = false

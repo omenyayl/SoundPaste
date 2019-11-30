@@ -27,7 +27,14 @@ class Send : Fragment() {
     lateinit var chirp: ChirpSDK
 
     companion object {
-        fun newInstance() = Send()
+        private const val ARGS_INITIAL_MESSAGE = "args_initial_message"
+        fun newInstance(message: String): Send {
+            val sendFragment = Send()
+            val args = Bundle()
+            args.putString(ARGS_INITIAL_MESSAGE, message)
+            sendFragment.arguments = args
+            return sendFragment
+        }
     }
 
     private lateinit var viewModel: SendViewModel
@@ -47,7 +54,7 @@ class Send : Fragment() {
     }
 
     private fun initViews() {
-        initEditTextContent(viewModel.getSnippetText().value ?: "")
+        initEditTextContent(viewModel.getSnippetText().value ?: arguments?.getString(ARGS_INITIAL_MESSAGE) ?: "")
         buttonClear.setOnClickListener { initEditTextContent(""); viewModel.onSnippetTextChanged("") }
         buttonSend.setOnClickListener { onClickButtonSend() }
     }

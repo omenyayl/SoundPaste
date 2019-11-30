@@ -8,10 +8,12 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import edu.omenyayl.soundpaste.R
 import edu.omenyayl.soundpaste.models.Snippet
+import kotlinx.android.synthetic.main.snippet_item.view.*
 
 class SnippetListAdapter (private var snippetList: List<Snippet>) : RecyclerView.Adapter<SnippetListAdapter.ViewHolder>() {
 
-    lateinit var onModelClickListener: ((Snippet) -> Unit)
+    lateinit var onCopyClickListener: ((Snippet) -> Unit)
+    lateinit var onShareClickListener: ((Snippet) -> Unit)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -23,8 +25,11 @@ class SnippetListAdapter (private var snippetList: List<Snippet>) : RecyclerView
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val snippet = this.snippetList[position]
         holder.textViewSnippet.text = snippet.text
-        if (this::onModelClickListener.isInitialized) {
-            holder.cardViewSnippet.setOnClickListener { onModelClickListener(snippet)}
+        if (this::onCopyClickListener.isInitialized) {
+            holder.buttonCopy.setOnClickListener { onCopyClickListener(snippet) }
+        }
+        if (this::onShareClickListener.isInitialized) {
+            holder.buttonShare.setOnClickListener { onShareClickListener(snippet) }
         }
     }
 
@@ -33,7 +38,8 @@ class SnippetListAdapter (private var snippetList: List<Snippet>) : RecyclerView
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val textViewSnippet: TextView = itemView.findViewById(R.id.textViewSnippet)
-        val cardViewSnippet: CardView = itemView.findViewById(R.id.cardViewSnippet)
+        val textViewSnippet = itemView.textViewSnippet!!
+        val buttonCopy = itemView.buttonCopy!!
+        val buttonShare = itemView.buttonShare!!
     }
 }

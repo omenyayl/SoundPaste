@@ -4,9 +4,7 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 import edu.omenyayl.soundpaste.R
 import edu.omenyayl.soundpaste.misc.Constants
@@ -56,13 +54,11 @@ class ReceiveMessageDialog: DialogFragment() {
 
     private fun onMessageReceived(message: String) {
         viewModel.onReceiveMessage(message)
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
         dialog?.dismiss()
     }
 
     private fun stopListening() {
         chirp.stop()
         chirp.close()
-//        Toast.makeText(context, "Stopping", Toast.LENGTH_SHORT).show()
     }
 }

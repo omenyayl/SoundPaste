@@ -1,5 +1,6 @@
 package edu.omenyayl.soundpaste.activities
 
+import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -27,9 +28,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun viewSendFragment() {
+        viewSendFragment("")
+    }
+
+    private fun viewSendFragment(initialMessage: String) {
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.fragment_container, Send.newInstance())
+            .replace(R.id.fragment_container, Send.newInstance(initialMessage))
             .commit()
     }
 
@@ -46,5 +51,14 @@ class MainActivity : AppCompatActivity() {
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
         viewSendFragment() // start the send fragment first
+
+        if (intent?.action == Intent.ACTION_SEND &&
+            intent?.type == "text/plain") {
+            handleActionSendIntent(intent)
+        }
+    }
+
+    private fun handleActionSendIntent(intent: Intent) {
+        viewSendFragment(intent.getStringExtra(Intent.EXTRA_TEXT))
     }
 }
