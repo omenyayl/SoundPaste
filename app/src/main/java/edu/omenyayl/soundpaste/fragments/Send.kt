@@ -18,6 +18,7 @@ import io.chirp.chirpsdk.models.ChirpError
 import io.chirp.chirpsdk.models.ChirpErrorCode
 import io.chirp.chirpsdk.models.ChirpSDKState
 import kotlinx.android.synthetic.main.send_fragment.*
+import kotlin.math.min
 
 /**
  * Fragment for sending messages
@@ -35,6 +36,8 @@ class Send : Fragment() {
             sendFragment.arguments = args
             return sendFragment
         }
+
+        const val MAX_CHARS = 32
     }
 
     private lateinit var viewModel: SendViewModel
@@ -54,7 +57,14 @@ class Send : Fragment() {
     }
 
     private fun initViews() {
-        initEditTextContent(viewModel.getSnippetText().value ?: arguments?.getString(ARGS_INITIAL_MESSAGE) ?: "")
+        // user came from a share intent
+        val intentMessage = this.arguments?.getString(ARGS_INITIAL_MESSAGE) ?: ""
+        if (intentMessage.isNotEmpty()) {
+            initEditTextContent(intentMessage)
+            this.arguments = null
+        } else {
+            initEditTextContent(viewModel.getSnippetText().value ?: "")
+        }
         buttonClear.setOnClickListener { initEditTextContent(""); viewModel.onSnippetTextChanged("") }
         buttonSend.setOnClickListener { onClickButtonSend() }
     }
@@ -68,16 +78,17 @@ class Send : Fragment() {
         }
     }
 
-    private fun initEditTextContent(initialText: String) {
+    private fun onSnippetTextChanged(text: String) {
         val maxChars = context?.resources?.getInteger(R.integer.maximum_send_text_characters)
-        textViewCharacterLimit.text = String.format("%d / %d", 0, maxChars)
-        editTextContent.setText(initialText, TextView.BufferType.EDITABLE)
-        editTextContent.addTextChangedListener {
-            text -> run {
-                textViewCharacterLimit.text = String.format("%d / %d", text?.length, maxChars)
-                viewModel.onSnippetTextChanged(text.toString())
-            }
-        }
+        textViewCharacterLimit.text = String.format("%d / %d", text.length, maxChars)
+        viewModel.onSnippetTextChanged(text)
+    }
+
+    private fun initEditTextContent(initialText: String) {
+        val trimmedText = initialText.substring(0, min(MAX_CHARS, initialText.length))
+        editTextContent.setText(trimmedText, TextView.BufferType.EDITABLE)
+        this.onSnippetTextChanged(trimmedText)
+        editTextContent.addTextChangedListener { text -> this.onSnippetTextChanged(text.toString()) }
     }
 
     private fun initChirpSDK() {
