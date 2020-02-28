@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.Observer
 import edu.omenyayl.soundpaste.R
 import edu.omenyayl.soundpaste.misc.Constants
 import edu.omenyayl.soundpaste.viewModels.SendViewModel
@@ -18,6 +19,9 @@ import io.chirp.chirpsdk.models.ChirpError
 import io.chirp.chirpsdk.models.ChirpErrorCode
 import io.chirp.chirpsdk.models.ChirpSDKState
 import kotlinx.android.synthetic.main.send_fragment.*
+import java.nio.ByteBuffer
+import java.nio.ByteBuffer.allocate
+import java.util.*
 
 /**
  * Fragment for sending messages
@@ -64,7 +68,7 @@ class Send : Fragment() {
         if (message.isEmpty()) {
             Toast.makeText(context, "Message cannot be empty", Toast.LENGTH_SHORT).show()
         } else {
-            sendChirp(message)
+            sendMessage(message)
         }
     }
 
@@ -112,9 +116,19 @@ class Send : Fragment() {
         }
     }
 
-    private fun sendChirp(message: String) {
+    private fun sendMessage(message: String) {
+        viewModel.uploadData(message, context!!, viewLifecycleOwner).observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+//                sendChirp(it)
+                Log.d(::Send.name, "Sending chirp: $it")
+                Log.d(::Send.name, "Chirp byte array: ${Arrays.toString(allocate(Long.SIZE_BYTES).putLong(it).array())}")
+            }
+        })
+    }
+
+    private fun sendChirp(id: Long) {
         chirp.start(send = true, receive = false)
-        val payload: ByteArray = message.toByteArray()
+        val payload: ByteArray = allocate(Long.SIZE_BYTES).putLong(id).array()
 
         val error = chirp.send(payload)
 

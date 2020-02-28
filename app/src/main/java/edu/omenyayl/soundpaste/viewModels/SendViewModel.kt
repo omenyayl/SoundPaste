@@ -1,7 +1,8 @@
 package edu.omenyayl.soundpaste.viewModels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
+import android.content.Context
+import androidx.lifecycle.*
+import edu.omenyayl.soundpaste.API.SnippetAPI
 import edu.omenyayl.soundpaste.repositories.SnippetRepository
 
 /**
@@ -21,6 +22,22 @@ class SendViewModel : ViewModel() {
      */
     fun onSnippetTextChanged(text: String) {
         SnippetRepository.snippetText.postValue(text)
+    }
+
+    fun uploadData(snippet: String, context: Context, lifecycleOwner: LifecycleOwner): LiveData<Long> {
+        val liveDataID = MutableLiveData<Long>()
+        val liveDataStringID = MutableLiveData<String>()
+        SnippetAPI.postSnippet(
+            liveDataStringID,
+            context,
+            snippet
+        )
+        liveDataStringID.observe(lifecycleOwner, Observer {
+            if (it != null) {
+                liveDataID.postValue(it.toLong())
+            }
+        })
+        return liveDataID
     }
 
 }
