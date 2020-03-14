@@ -5,20 +5,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".fragments.Send" android:id="@+id/constraintLayoutSend">
-    <TextView
-            android:text="@string/ascii_size_warning"
-            android:gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/textView" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="12dp" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="12dp"/>
+
     <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="0dp" app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/textView"
-            android:layout_marginStart="16dp" android:layout_marginEnd="16dp" android:layout_marginTop="16dp">
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="16dp" android:layout_marginEnd="16dp" android:layout_marginTop="16dp"
+            android:id="@+id/cardView" app:layout_constraintBottom_toBottomOf="parent">
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -27,7 +21,6 @@
                     android:id="@+id/editTextContent"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:maxLength="@integer/maximum_send_text_characters"
                     android:inputType="textMultiLine|text"
                     android:gravity="top"
                     android:ems="10"
@@ -35,14 +28,14 @@
                     app:layout_constraintBottom_toTopOf="@+id/buttonSend" app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textViewSendTitle" android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp" android:layout_marginStart="8dp" android:layout_marginEnd="8dp"/>
-            <TextView
-                    android:text="@string/sample_60_90"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textViewCharacterLimit"
-                    android:layout_marginBottom="24dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="24dp"/>
+            <!--<TextView-->
+            <!--android:text="@string/sample_60_90"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/textViewCharacterLimit"-->
+            <!--android:layout_marginBottom="24dp"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="24dp"/>-->
             <Button
                     android:id="@+id/buttonSend"
                     android:text="@string/button_send"

@@ -73,12 +73,12 @@ class Send : Fragment() {
     }
 
     private fun initEditTextContent(initialText: String) {
-        val maxChars = context?.resources?.getInteger(R.integer.maximum_send_text_characters)
-        textViewCharacterLimit.text = String.format("%d / %d", 0, maxChars)
+//        val maxChars = context?.resources?.getInteger(R.integer.maximum_send_text_characters)
+//        textViewCharacterLimit.text = String.format("%d / %d", 0, maxChars)
         editTextContent.setText(initialText, TextView.BufferType.EDITABLE)
         editTextContent.addTextChangedListener {
             text -> run {
-                textViewCharacterLimit.text = String.format("%d / %d", text?.length, maxChars)
+//                textViewCharacterLimit.text = String.format("%d / %d", text?.length, maxChars)
                 viewModel.onSnippetTextChanged(text.toString())
             }
         }
@@ -119,7 +119,7 @@ class Send : Fragment() {
     private fun sendMessage(message: String) {
         viewModel.uploadData(message, context!!, viewLifecycleOwner).observe(viewLifecycleOwner, Observer {
             if (it != null) {
-//                sendChirp(it)
+                sendChirp(it)
                 Log.d(::Send.name, "Sending chirp: $it")
                 Log.d(::Send.name, "Chirp byte array: ${Arrays.toString(allocate(Long.SIZE_BYTES).putLong(it).array())}")
             }
