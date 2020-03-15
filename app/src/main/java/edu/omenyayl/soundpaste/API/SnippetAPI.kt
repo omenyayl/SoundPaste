@@ -3,10 +3,16 @@ package edu.omenyayl.soundpaste.API
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.android.volley.Request
 import com.android.volley.Response
+import com.android.volley.VolleyError
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.JsonRequest
 import com.android.volley.toolbox.StringRequest
+import org.json.JSONObject
 
 class SnippetAPI {
+
     companion object {
         /**
          * @param result The result will be posted to this object
@@ -44,6 +50,35 @@ class SnippetAPI {
                     return snippet.toByteArray(Charsets.UTF_8)
                 }
             }
+            requestQueue.add(stringRequest)
+        }
+
+        fun getSnippet(responseListener: (data: String, error: VolleyError?) -> Unit,
+                       context: Context,
+                       id: Long) {
+            val requestQueue = SnippetRequestQueue.getRequestQueue(context)
+            val url = Endpoints.getSnippetEndpoint(id)
+
+            val onResultListener = Response.Listener<JSONObject> {
+                Log.d(::SnippetAPI.name, "Response: $it")
+                val content = it.getString("content")
+                responseListener(content, null)
+            }
+
+            val onErrorListener = Response.ErrorListener {
+                if (it != null ) {
+                    Log.e(::SnippetAPI.name, "Error: $it")
+                    responseListener("", null)
+                }
+            }
+
+            val stringRequest = JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                onResultListener,
+                onErrorListener
+            )
             requestQueue.add(stringRequest)
         }
     }
