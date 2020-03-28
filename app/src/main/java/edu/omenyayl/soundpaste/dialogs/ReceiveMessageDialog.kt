@@ -3,12 +3,14 @@ package edu.omenyayl.soundpaste.dialogs
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProviders
 import edu.omenyayl.soundpaste.API.SnippetAPI
 import edu.omenyayl.soundpaste.R
+import edu.omenyayl.soundpaste.misc.AES
 import edu.omenyayl.soundpaste.misc.Constants
 import edu.omenyayl.soundpaste.viewModels.ReceiveViewModel
 import io.chirp.chirpsdk.ChirpSDK
@@ -56,14 +58,24 @@ class ReceiveMessageDialog: DialogFragment() {
         }
         chirp.onReceived { payload, _ -> run {
             val buffer = ByteBuffer.wrap(payload)
-            val id = buffer.getLong(0)
+            val key = ByteArray(16)
+            for (i in 0..15) {
+                key[i] = buffer[i]
+            }
+            val id = buffer.getInt(16).toLong()
 
             SnippetAPI.getSnippet({
                 result, error ->
                 if (error != null) {
                     Toast.makeText(context!!, "Unable to process the message", Toast.LENGTH_LONG).show()
                 } else {
-                    onMessageReceived(result)
+                    val ivCipherText = Base64.decode(result, Base64.DEFAULT)
+                    val message = AES.decrypt(
+                        ivCipherText.sliceArray(16 until ivCipherText.size),
+                        key,
+                        ivCipherText.sliceArray(0..15)
+                    )
+                    onMessageReceived(message)
                 }
             }, context!!, id)
 
