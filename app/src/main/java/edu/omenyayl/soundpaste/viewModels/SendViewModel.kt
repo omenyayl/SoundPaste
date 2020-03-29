@@ -24,8 +24,8 @@ class SendViewModel : ViewModel() {
         SnippetRepository.snippetText.postValue(text)
     }
 
-    fun uploadData(snippet: String, context: Context, lifecycleOwner: LifecycleOwner): LiveData<Long> {
-        val liveDataID = MutableLiveData<Long>()
+    fun uploadData(snippet: String, context: Context, lifecycleOwner: LifecycleOwner): LiveData<Int> {
+        val liveDataID = MutableLiveData<Int>()
         val liveDataStringID = MutableLiveData<String>()
         SnippetAPI.postSnippet(
             liveDataStringID,
@@ -34,7 +34,7 @@ class SendViewModel : ViewModel() {
         )
         liveDataStringID.observe(lifecycleOwner, Observer {
             if (it != null) {
-                liveDataID.postValue(it.toLong())
+                liveDataID.postValue(it.toInt())
             }
         })
         return liveDataID

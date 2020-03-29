@@ -33,4 +33,9 @@ class AESTest {
         val plaintext = AES.decrypt(cipherText, keyBytes, iv)
         assertEquals("hello", plaintext)
     }
+
+    @Test
+    fun testEncrypt3() {
+        val message = "hello"
+    }
 }

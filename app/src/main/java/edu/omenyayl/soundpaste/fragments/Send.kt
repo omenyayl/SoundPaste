@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
 import edu.omenyayl.soundpaste.R
+import edu.omenyayl.soundpaste.misc.AES
 import edu.omenyayl.soundpaste.misc.Constants
 import edu.omenyayl.soundpaste.viewModels.SendViewModel
 import io.chirp.chirpsdk.ChirpSDK
@@ -117,18 +118,23 @@ class Send : Fragment() {
     }
 
     private fun sendMessage(message: String) {
-        viewModel.uploadData(message, context!!, viewLifecycleOwner).observe(viewLifecycleOwner, Observer {
+        val ivCipherTextKey: Pair<String, ByteArray> = AES.encrypt(message)
+        val ivCipherText = ivCipherTextKey.first
+        val key = ivCipherTextKey.second
+        viewModel.uploadData(ivCipherText, context!!, viewLifecycleOwner).observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                sendChirp(it)
-                Log.d(::Send.name, "Sending chirp: $it")
-                Log.d(::Send.name, "Chirp byte array: ${Arrays.toString(allocate(Long.SIZE_BYTES).putLong(it).array())}")
+                val id = allocate(4)
+                id.putInt(it)
+                val chirpPayload = ByteArray(key.size + 4) { i -> if (i < key.size) key[i] else id[i - key.size] }
+                sendChirp(chirpPayload)
+                Log.d(::Send.name, "Sending chirp: $chirpPayload")
+                Log.d(::Send.name, "Chirp byte array: ${Arrays.toString(allocate(Long.SIZE_BYTES).putInt(it).array())}")
             }
         })
     }
 
-    private fun sendChirp(id: Long) {
+    private fun sendChirp(payload: ByteArray) {
         chirp.start(send = true, receive = false)
-        val payload: ByteArray = allocate(Long.SIZE_BYTES).putLong(id).array()
 
         val error = chirp.send(payload)
 
